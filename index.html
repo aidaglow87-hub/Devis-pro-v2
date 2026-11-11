@@ -61,7 +61,7 @@ function $(s){return document.querySelector(s)}
 function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function fmt(n){return new Intl.NumberFormat("fr-FR").format(Math.round(n||0)).replace(/\s/g," ")+" FCFA"}
 function total(d){return d.lines.reduce(function(s,l){return s+(+l.q||0)*(+l.p||0)},0)}
-var CODES=["DP-K7M2","DP-X9Q4","DP-R5T8","DP-W3N6","DP-H8J1","DP-B4V7","DP-Z2C9","DP-F6L3","DP-M1S5","DP-Y7D2","DP-P9G4","DP-T3K8","DP-N5R6","DP-C8W1","DP-J2H7","DP-V6B9","DP-Q4Z3","DP-L1F5","DP-S9M8","DP-D7Y2","DP-A3K9","DP-E5R2","DP-G7T6","DP-U4W8","DP-X2H5","DP-B9N3","DP-F8Q7","DP-K4Y1","DP-M6C4","DP-P2V9","DP-R8J5","DP-T1Z6","DP-W7L2","DP-H3D8","DP-C5S4","DP-N9F1","DP-Q6B7","DP-Y3G9","DP-Z8M3","DP-V1P5"];
+var CODES=["DP-K7M2","DP-X9Q4","DP-R5T8","DP-W3N6","DP-H8J1","DP-B4V7",`"DP-R5T8","DP-W3N6"...`"DP-Z2C9","DP-F6L3","DP-M1S5","DP-Y7D2","DP-P9G4","DP-T3K8","DP-N5R6","DP-C8W1","DP-J2H7","DP-V6B9","DP-Q4Z3","DP-L1F5","DP-S9M8","DP-D7Y2","DP-A3K9","DP-E5R2","DP-G7T6","DP-U4W8","DP-X2H5","DP-B9N3","DP-F8Q7","DP-K4Y1","DP-M6C4","DP-P2V9","DP-R8J5","DP-T1Z6","DP-W7L2","DP-H3D8","DP-C5S4","DP-N9F1","DP-Q6B7","DP-Y3G9","DP-Z8M3","DP-V1P5"];
 function isPro(){return S.pro&&S.pro>Date.now()}
 function monthKey(){return new Date().toISOString().slice(0,7)}
 function monthCount(){return S.docs.filter(function(d){return !d.conv&&d.date.slice(0,7)===monthKey()}).length}
@@ -74,8 +74,7 @@ function nav(){var v=[["home","Accueil"],["new","Nouveau"],["docs","Documents"]]
 function render(){nav();var h="";if(view==="home")h=home();else if(view==="new")h=newDoc();else if(view==="docs")h=docs();else h=docView();$("#app").innerHTML=h;window.scrollTo(0,0)}
 function item(d){return'<div class="card item" data-act="open" data-id="'+d.id+'"><div class="row"><b>'+esc(d.client)+'</b><span class="tag '+(unpaid(d)?"imp":d.status)+'">'+(unpaid(d)?"Impayé":d.status)+"</span></div><div class=\"row sub\" style=\"margin:4px 0 0\"><span>"+d.type+" n° "+d.num+"</span><b style=\"color:var(--ink)\">"+fmt(total(d))+"</b></div></div>"}
 function home(){var imp=S.docs.filter(unpaid),sum=imp.reduce(function(s,d){return s+total(d)},0),n=monthCount();
-return'<h1>Devis<span class="brand">Pro</span></h1><p class="sub">Devis et factures pour artisans, envoyés sur WhatsApp.</p>'+
-'<button class="btn pri" data-act="go" data-v="new">Nouveau devis</button>'+
+return'<h1>Devis<span class="brand">Pro</span></h1><p c*,"'+
 '<div class="card"><div class="row"><span>Documents ce mois</span><b>'+n+(isPro()?" (Pro : illimité)":" / 3 (plan gratuit)")+'</b></div><div class="row" style="margin-top:8px"><span>Impayés</span><b style="color:var(--bad)">'+fmt(sum)+"</b></div></div>"+
 '<h2>Récents</h2>'+(S.docs.length?S.docs.slice(0,4).map(item).join(""):'<div class="card sub">Aucun document pour l’instant. Crée ton premier devis en 1 minute.</div>')+
 '<h2>Mon entreprise</h2><div class="card"><label for="bn">Nom de l’artisan ou de l’entreprise</label><input id="bn" data-f="name" value="'+esc(S.name)+'" placeholder="Ex. Jamais sans Dieu Business"><label for="bp">Mon numéro WhatsApp</label><input id="bp" data-f="phone" inputmode="tel" value="'+esc(S.phone)+'" placeholder="Ex. 67 45 71 57"></div>'+
